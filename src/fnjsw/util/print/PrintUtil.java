@@ -23,7 +23,7 @@ public class PrintUtil {
 		MediaSizeName media_size_name = MediaSizeName.ISO_A4;
 		int pages = 1;
 		PrintSet pSet =new PrintSet(font, color, media_size_name, pages);
-		
+		pSet.setPrinterName("HP LaserJet Professional M1136 MFP");
 		
 		PrintStr ps1 = new PrintStr(100,200,"TestA");
 		PrintStr ps2 = new PrintStr(200,300,"TestB");

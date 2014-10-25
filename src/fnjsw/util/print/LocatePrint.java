@@ -6,6 +6,7 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.util.List;
+
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -14,9 +15,11 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 import javax.print.attribute.DocAttributeSet;
+import javax.print.attribute.HashAttributeSet;
 import javax.print.attribute.HashDocAttributeSet;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.PrinterName;
 import javax.swing.JOptionPane;
 
 /**
@@ -61,6 +64,33 @@ public class LocatePrint implements Printable {
     		g2.drawString(ps.getStr(), ps.getFx(), ps.getFy()); 
     	}
     }
+    
+    /**
+     * 根据打印机名称找到打印机
+     */
+	private PrintService getPrinterByName(String printerName) {
+		if(printerName == null){
+			return getDefaultPrintService();
+		}
+		HashAttributeSet hs = new HashAttributeSet();
+		hs.add(new PrinterName(printerName, null));
+		
+		PrintService[] pss = PrintServiceLookup.lookupPrintServices(null, hs);  
+		if(pss.length == 0){
+			return getDefaultPrintService();
+		}else{
+			return pss[0];
+		}
+	}
+	
+	/**
+	 * 获得默认的打印机
+	 * @return
+	 */
+	private PrintService getDefaultPrintService(){
+		PrintService defaultService = PrintServiceLookup.lookupDefaultPrintService();
+		return defaultService;
+	}
 
     public void printContent() {
     	// 打印内容为空时
@@ -68,8 +98,10 @@ public class LocatePrint implements Printable {
         {
             // 指定打印输出格式
             DocFlavor flavor = DocFlavor.SERVICE_FORMATTED.PRINTABLE;
-            // 定位默认的打印服务
-            PrintService printService = PrintServiceLookup.lookupDefaultPrintService();
+            
+            // 定位打印服务
+            PrintService printService = getPrinterByName(pSet.getPrinterName());
+            
             // 创建打印作业
             DocPrintJob job = printService.createPrintJob();
             // 设置打印属性

@@ -24,6 +24,8 @@ public class PrintSet {
 	
 	private MediaSizeName media_size_name;
 	
+	private String printerName;
+	
 	// 页数
 	private int pages;
 
@@ -57,5 +59,13 @@ public class PrintSet {
 
 	public void setPages(int pages) {
 		this.pages = pages;
+	}
+
+	public String getPrinterName() {
+		return printerName;
+	}
+
+	public void setPrinterName(String printerName) {
+		this.printerName = printerName;
 	}
 }
